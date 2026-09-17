@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Inscription</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Le formulaire d'inscription -->
+    <form id="form-inscription">
+      <h1>Créer un compte</h1>
+
+      <p id="message-erreur" class="erreur"></p>
+
+      <label for="login">Login</label>
+      <input type="text" id="login" required />
+
+      <label for="password">Mot de passe</label>
+      <input type="password" id="password" required />
+
+      <label for="confirmation">Confirmation du mot de passe</label>
+      <input type="password" id="confirmation" required />
+
+      <label for="nom">Nom</label>
+      <input type="text" id="nom" required />
+
+      <label for="prenom">Prénom</label>
+      <input type="text" id="prenom" required />
+
+      <label for="adresse">Adresse</label>
+      <input type="text" id="adresse" required />
+
+      <label for="email">Email</label>
+      <input type="email" id="email" required />
+
+      <label for="telephone">Téléphone</label>
+      <input type="text" id="telephone" required />
+
+      <label for="date-naissance">Date de naissance</label>
+      <input type="date" id="date-naissance" required />
+
+      <button type="submit">S'inscrire</button>
+    </form>
+
+    <!-- La page récapitulative, cachée au départ -->
+    <div id="recap" class="cache">
+      <h1>Merci pour ton inscription !</h1>
+      <p><strong>Login :</strong> <span id="recap-login"></span></p>
+      <p><strong>Nom :</strong> <span id="recap-nom"></span></p>
+      <p><strong>Prénom :</strong> <span id="recap-prenom"></span></p>
+      <p><strong>Adresse :</strong> <span id="recap-adresse"></span></p>
+      <p><strong>Email :</strong> <span id="recap-email"></span></p>
+      <p><strong>Téléphone :</strong> <span id="recap-telephone"></span></p>
+      <p><strong>Date de naissance :</strong> <span id="recap-date"></span></p>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

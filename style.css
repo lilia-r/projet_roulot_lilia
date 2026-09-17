@@ -1,0 +1,105 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f2f2f2;
+  margin: 0;
+  padding: 40px 20px;
+}
+
+/* Formulaire */
+form,
+#recap {
+  background-color: white;
+  width: 400px;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+}
+
+/* Organisation du formulaire */
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Titre */
+h1 {
+  text-align: center;
+  color: #333;
+  margin-top: 0;
+  margin-bottom: 25px;
+}
+
+/* Message d'erreur */
+.erreur {
+  color: #c0392b;
+  text-align: center;
+  font-weight: bold;
+  min-height: 20px;
+}
+
+/* Labels */
+label {
+  font-weight: bold;
+  color: #444;
+  margin-bottom: 5px;
+}
+
+/* Champs */
+input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+/* Quand on clique dans un champ */
+input:focus {
+  outline: none;
+  border-color: #666;
+}
+
+/* Bouton */
+button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 5px;
+  border: none;
+  border-radius: 6px;
+  background-color: #333;
+  color: white;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+/* Quand on passe la souris sur le bouton */
+button:hover {
+  background-color: #555;
+}
+
+/* Récapitulatif */
+#recap p {
+  margin: 12px 0;
+}
+
+/* Élément caché */
+.cache {
+  display: none;
+}
+
+/* Téléphone */
+@media (max-width: 500px) {
+  body {
+    padding: 20px 10px;
+  }
+
+  form,
+  #recap {
+    padding: 20px;
+  }
+}
