@@ -1,0 +1,141 @@
+<div class="signup-container">
+  <div class="signup-card">
+    <div class="header">
+      <h2>Créer un compte</h2>
+      <p class="subtitle">Espace d'inscription</p>
+    </div>
+
+    <!-- Message affiché uniquement si isSubmitted vaut true grâce à la directive structurelle *ngIf -->
+    <div *ngIf="isSubmitted" class="success-banner">
+      ✓ Inscription enregistrée avec succès pour {{ user.prenom }} {{ user.nom }} !
+    </div>
+
+    <!-- #signupForm="ngForm" crée une référence locale pour suivre l'état de validité de tout le formulaire -->
+    <!-- (ngSubmit) capte la soumission et appelle la méthode onSubmit du fichier TypeScript -->
+    <!-- novalidate désactive les infobulles par défaut du navigateur pour laisser Angular gérer les erreurs -->
+    <form #signupForm="ngForm" (ngSubmit)="onSubmit(signupForm)" novalidate>
+      <div class="row">
+        <!-- Champ Prénom -->
+        <div class="field-group">
+          <label for="prenom">Prénom *</label>
+          <!-- [(ngModel)] lie la valeur de l'input à la variable user.prenom (liaison bidirectionnelle) -->
+          <!-- #prenom="ngModel" permet de vérifier l'état de ce champ précis (valide, touché, etc.) -->
+          <input
+            type="text"
+            id="prenom"
+            name="prenom"
+            [(ngModel)]="user.prenom"
+            #prenom="ngModel"
+            required
+            placeholder="Ex : Lilia"
+          />
+          <!-- Erreur affichée seulement si le champ est vide (invalid) ET que l'utilisateur a cliqué dedans (touched) -->
+          <small class="error-msg" *ngIf="prenom.invalid && prenom.touched">
+            Le prénom est requis.
+          </small>
+        </div>
+
+        <!-- Champ Nom -->
+        <div class="field-group">
+          <label for="nom">Nom *</label>
+          <input
+            type="text"
+            id="nom"
+            name="nom"
+            [(ngModel)]="user.nom"
+            #nom="ngModel"
+            required
+            placeholder="Ex : Roulot"
+          />
+          <small class="error-msg" *ngIf="nom.invalid && nom.touched"> Le nom est requis. </small>
+        </div>
+      </div>
+
+      <!-- Champ Login -->
+      <div class="field-group">
+        <label for="login">Login *</label>
+        <input
+          type="text"
+          id="login"
+          name="login"
+          [(ngModel)]="user.login"
+          #login="ngModel"
+          required
+          placeholder="Votre identifiant"
+        />
+        <small class="error-msg" *ngIf="login.invalid && login.touched">
+          Le login est requis.
+        </small>
+      </div>
+
+      <!-- Champ Email -->
+      <div class="field-group">
+        <label for="email">Email *</label>
+        <!-- L'attribut email active le validateur Angular vérifiant le format (nom@domaine.com) -->
+        <input
+          type="email"
+          id="email"
+          name="email"
+          [(ngModel)]="user.email"
+          #email="ngModel"
+          required
+          email
+          placeholder="nom@exemple.com"
+        />
+        <small class="error-msg" *ngIf="email.invalid && email.touched">
+          Veuillez renseigner un email valide.
+        </small>
+      </div>
+
+      <!-- Champ Mot de passe -->
+      <div class="field-group">
+        <label for="password">Mot de passe *</label>
+        <!-- minlength="6" impose un minimum de 6 caractères pour valider le champ -->
+        <input
+          type="password"
+          id="password"
+          name="password"
+          [(ngModel)]="user.password"
+          #password="ngModel"
+          required
+          minlength="6"
+          placeholder="••••••••"
+        />
+        <small class="error-msg" *ngIf="password.invalid && password.touched">
+          Mot de passe requis (6 caractères min.).
+        </small>
+      </div>
+
+      <!-- Champ Confirmation du mot de passe -->
+      <div class="field-group">
+        <label for="confirmPassword">Confirmer le mot de passe *</label>
+        <input
+          type="password"
+          id="confirmPassword"
+          name="confirmPassword"
+          [(ngModel)]="user.confirmPassword"
+          #confirmPassword="ngModel"
+          required
+          placeholder="••••••••"
+        />
+        <!-- Vérifie en direct si les deux chaînes de caractères sont strictement identiques -->
+        <small
+          class="error-msg"
+          *ngIf="confirmPassword.touched && user.password !== user.confirmPassword"
+        >
+          Les mots de passe ne correspondent pas.
+        </small>
+      </div>
+
+      <!-- Verrouillage du bouton : [disabled] est actif tant que le formulaire est invalide -->
+      <!-- OU que la confirmation du mot de passe ne correspond pas au premier mot de passe -->
+      <button
+        type="submit"
+        class="btn-submit"
+        [disabled]="signupForm.invalid || user.password !== user.confirmPassword"
+      >
+        Valider l'inscription
+      </button>
+    </form>
+  </div>
+</div>
