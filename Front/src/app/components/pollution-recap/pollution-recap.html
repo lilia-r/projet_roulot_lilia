@@ -1,0 +1,47 @@
+<div class="recap-container">
+  <div class="badge-succes">✓ Déclaration enregistrée avec succès</div>
+  <h2>Récapitulatif de la déclaration</h2>
+
+  <div class="recap-content">
+    <div class="item">
+      <span class="label">Titre :</span>
+      <span class="valeur">{{ data.titre }}</span>
+    </div>
+
+    <div class="item">
+      <span class="label">Type de pollution :</span>
+      <span class="valeur tag">{{ data.typePollution }}</span>
+    </div>
+
+    <div class="item">
+      <span class="label">Date d'observation :</span>
+      <span class="valeur">{{ data.dateObservation }}</span>
+    </div>
+
+    <div class="item">
+      <span class="label">Lieu :</span>
+      <span class="valeur">{{ data.lieu }}</span>
+    </div>
+
+    <div class="item">
+      <span class="label">Coordonnées GPS :</span>
+      <span class="valeur">Lat : {{ data.latitude }} | Long : {{ data.longitude }}</span>
+    </div>
+
+    <div class="item full">
+      <span class="label">Description :</span>
+      <p class="description-texte">{{ data.description }}</p>
+    </div>
+
+    @if (data.photoUrl) {
+      <div class="item full photo-block">
+        <span class="label">Photo :</span>
+        <img [src]="data.photoUrl" alt="Photo de la pollution déclarée" class="apercu-photo" />
+      </div>
+    }
+  </div>
+
+  <button type="button" class="btn-nouveau" (click)="onReset()">
+    Déclarer une autre pollution
+  </button>
+</div>

@@ -1,0 +1,7 @@
+<main>
+  @if (!declaredPollution) {
+    <app-pollution-form (formSubmitted)="onPollutionCreated($event)" />
+  } @else {
+    <app-pollution-recap [data]="declaredPollution" (reset)="onReset()" />
+  }
+</main>

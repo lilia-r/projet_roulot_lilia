@@ -1,0 +1,98 @@
+<div class="form-card">
+  <h2>Déclarer une nouvelle pollution</h2>
+  <p class="subtitle">Renseignez les détails pour alerter sur une pollution observée</p>
+
+  <form [formGroup]="pollutionForm" (ngSubmit)="onSubmit()" novalidate>
+    <div class="champ">
+      <label for="titre">Titre de la pollution *</label>
+      <input
+        id="titre"
+        type="text"
+        formControlName="titre"
+        placeholder="Ex : Déchets plastiques en bord de rivière"
+      />
+      @if (isFieldInvalid('titre')) {
+        <span class="erreur">Le titre est requis.</span>
+      }
+    </div>
+
+    <div class="champ">
+      <label for="typePollution">Type de pollution *</label>
+      <select id="typePollution" formControlName="typePollution">
+        <option value="" disabled>-- Choisir un type --</option>
+        @for (type of typesPollution; track type) {
+          <option [value]="type">{{ type }}</option>
+        }
+      </select>
+      @if (isFieldInvalid('typePollution')) {
+        <span class="erreur">Le type de pollution est requis.</span>
+      }
+    </div>
+
+    <div class="champ">
+      <label for="description">Description *</label>
+      <textarea
+        id="description"
+        rows="3"
+        formControlName="description"
+        placeholder="Description précise de l'observation..."
+      ></textarea>
+      @if (isFieldInvalid('description')) {
+        <span class="erreur">La description est requise.</span>
+      }
+    </div>
+
+    <div class="ligne-double">
+      <div class="champ">
+        <label for="dateObservation">Date de l'observation *</label>
+        <input id="dateObservation" type="date" formControlName="dateObservation" />
+        @if (isFieldInvalid('dateObservation')) {
+          <span class="erreur">La date est requise.</span>
+        }
+      </div>
+
+      <div class="champ">
+        <label for="lieu">Lieu *</label>
+        <input
+          id="lieu"
+          type="text"
+          formControlName="lieu"
+          placeholder="Ex : Parc de l'Orangerie, Strasbourg"
+        />
+        @if (isFieldInvalid('lieu')) {
+          <span class="erreur">Le lieu est requis.</span>
+        }
+      </div>
+    </div>
+
+    <div class="ligne-double">
+      <div class="champ">
+        <label for="latitude">Latitude (ex : 48.5839) *</label>
+        <input id="latitude" type="text" formControlName="latitude" placeholder="Ex : 48.5839" />
+        @if (isFieldInvalid('latitude')) {
+          <span class="erreur">Nombre valide requis (-90 à 90).</span>
+        }
+      </div>
+
+      <div class="champ">
+        <label for="longitude">Longitude (ex : 7.7455) *</label>
+        <input id="longitude" type="text" formControlName="longitude" placeholder="Ex : 7.7455" />
+        @if (isFieldInvalid('longitude')) {
+          <span class="erreur">Nombre valide requis (-180 à 180).</span>
+        }
+      </div>
+    </div>
+
+    <div class="champ">
+      <label for="photoUrl">Photo (URL) <em>(optionnel)</em></label>
+      <input
+        id="photoUrl"
+        type="url"
+        formControlName="photoUrl"
+        placeholder="https://exemple.com/image.jpg"
+      />
+    </div>
+
+    <button type="submit" class="btn-submit" [disabled]="pollutionForm.invalid">Déclarer</button>
+  </form>
+</div>
