@@ -1,13 +1,13 @@
-import { Component } from "@angular/core";
-import { SignupComponent } from "./signup/signup";
+import { Component } from '@angular/core';
+import { SignupComponent } from './signup/signup';
 
 @Component({
-  selector: "app-root",
+  selector: 'app-root',
   standalone: true,
   imports: [SignupComponent],
-  templateUrl: "./app.html",
-  styleUrl: "./app.scss",
+  templateUrl: './app.html',
+  styleUrl: './app.scss',
 })
 export class App {
-  title = "roulot_lilia";
+  title = 'projet_roulot_lilia';
 }

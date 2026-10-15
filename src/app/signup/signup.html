@@ -1,141 +1,66 @@
-<div class="signup-container">
-  <div class="signup-card">
-    <div class="header">
-      <h2>Créer un compte</h2>
-      <p class="subtitle">Espace d'inscription</p>
-    </div>
+<div class="signup-page">
+  <h1 class="page-title">INSCRIPTION</h1>
 
-    <!-- Message affiché uniquement si isSubmitted vaut true grâce à la directive structurelle *ngIf -->
-    <div *ngIf="isSubmitted" class="success-banner">
-      ✓ Inscription enregistrée avec succès pour {{ user.prenom }} {{ user.nom }} !
-    </div>
+  <div class="form-card">
+    <div class="accent-border"></div>
 
-    <!-- #signupForm="ngForm" crée une référence locale pour suivre l'état de validité de tout le formulaire -->
-    <!-- (ngSubmit) capte la soumission et appelle la méthode onSubmit du fichier TypeScript -->
-    <!-- novalidate désactive les infobulles par défaut du navigateur pour laisser Angular gérer les erreurs -->
-    <form #signupForm="ngForm" (ngSubmit)="onSubmit(signupForm)" novalidate>
-      <div class="row">
-        <!-- Champ Prénom -->
-        <div class="field-group">
-          <label for="prenom">Prénom *</label>
-          <!-- [(ngModel)] lie la valeur de l'input à la variable user.prenom (liaison bidirectionnelle) -->
-          <!-- #prenom="ngModel" permet de vérifier l'état de ce champ précis (valide, touché, etc.) -->
-          <input
-            type="text"
-            id="prenom"
-            name="prenom"
-            [(ngModel)]="user.prenom"
-            #prenom="ngModel"
-            required
-            placeholder="Ex : Lilia"
-          />
-          <!-- Erreur affichée seulement si le champ est vide (invalid) ET que l'utilisateur a cliqué dedans (touched) -->
-          <small class="error-msg" *ngIf="prenom.invalid && prenom.touched">
-            Le prénom est requis.
-          </small>
-        </div>
-
-        <!-- Champ Nom -->
-        <div class="field-group">
-          <label for="nom">Nom *</label>
-          <input
-            type="text"
-            id="nom"
-            name="nom"
-            [(ngModel)]="user.nom"
-            #nom="ngModel"
-            required
-            placeholder="Ex : Roulot"
-          />
-          <small class="error-msg" *ngIf="nom.invalid && nom.touched"> Le nom est requis. </small>
-        </div>
-      </div>
-
-      <!-- Champ Login -->
-      <div class="field-group">
-        <label for="login">Login *</label>
+    <form (ngSubmit)="onSubmit()" class="form-content">
+      <div class="form-group">
+        <label for="name">NOM COMPLET</label>
         <input
+          id="name"
           type="text"
-          id="login"
-          name="login"
-          [(ngModel)]="user.login"
-          #login="ngModel"
+          [(ngModel)]="formData.name"
+          name="name"
+          placeholder="Ex: Jean Dupont"
           required
-          placeholder="Votre identifiant"
+          autocomplete="off"
         />
-        <small class="error-msg" *ngIf="login.invalid && login.touched">
-          Le login est requis.
-        </small>
       </div>
 
-      <!-- Champ Email -->
-      <div class="field-group">
-        <label for="email">Email *</label>
-        <!-- L'attribut email active le validateur Angular vérifiant le format (nom@domaine.com) -->
+      <div class="form-group">
+        <label for="email">ADRESSE EMAIL</label>
         <input
-          type="email"
           id="email"
+          type="email"
+          [(ngModel)]="formData.email"
           name="email"
-          [(ngModel)]="user.email"
-          #email="ngModel"
-          required
-          email
           placeholder="nom@exemple.com"
+          required
+          autocomplete="off"
         />
-        <small class="error-msg" *ngIf="email.invalid && email.touched">
-          Veuillez renseigner un email valide.
-        </small>
       </div>
 
-      <!-- Champ Mot de passe -->
-      <div class="field-group">
-        <label for="password">Mot de passe *</label>
-        <!-- minlength="6" impose un minimum de 6 caractères pour valider le champ -->
+      <div class="form-group">
+        <label for="password">MOT DE PASSE</label>
         <input
-          type="password"
           id="password"
-          name="password"
-          [(ngModel)]="user.password"
-          #password="ngModel"
-          required
-          minlength="6"
-          placeholder="••••••••"
-        />
-        <small class="error-msg" *ngIf="password.invalid && password.touched">
-          Mot de passe requis (6 caractères min.).
-        </small>
-      </div>
-
-      <!-- Champ Confirmation du mot de passe -->
-      <div class="field-group">
-        <label for="confirmPassword">Confirmer le mot de passe *</label>
-        <input
           type="password"
-          id="confirmPassword"
-          name="confirmPassword"
-          [(ngModel)]="user.confirmPassword"
-          #confirmPassword="ngModel"
+          [(ngModel)]="formData.password"
+          name="password"
+          placeholder="••••••••••••"
           required
-          placeholder="••••••••"
         />
-        <!-- Vérifie en direct si les deux chaînes de caractères sont strictement identiques -->
-        <small
-          class="error-msg"
-          *ngIf="confirmPassword.touched && user.password !== user.confirmPassword"
-        >
-          Les mots de passe ne correspondent pas.
-        </small>
       </div>
 
-      <!-- Verrouillage du bouton : [disabled] est actif tant que le formulaire est invalide -->
-      <!-- OU que la confirmation du mot de passe ne correspond pas au premier mot de passe -->
-      <button
-        type="submit"
-        class="btn-submit"
-        [disabled]="signupForm.invalid || user.password !== user.confirmPassword"
-      >
-        Valider l'inscription
+      <button type="submit" class="submit-btn" [disabled]="isLoading">
+        {{ isLoading ? 'ENVOI EN COURS...' : "S'INSCRIRE" }}
       </button>
     </form>
+
+    <!-- Message de confirmation -->
+    <div *ngIf="response" class="status-box success">
+      <div class="status-title">{{ response.message }}</div>
+      <div class="status-details">
+        <span><strong>ID :</strong> {{ response.user.id }}</span>
+        <span><strong>NOM :</strong> {{ response.user.name }}</span>
+        <span><strong>EMAIL :</strong> {{ response.user.email }}</span>
+      </div>
+    </div>
+
+    <!-- Message d'erreur -->
+    <div *ngIf="errorMessage" class="status-box error">
+      {{ errorMessage }}
+    </div>
   </div>
 </div>

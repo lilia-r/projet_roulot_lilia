@@ -1,35 +1,49 @@
-import { Component } from '@angular/core';
+import { Component, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-// Outil obligatoire pour faire fonctionner les formulaires simples dans Angular
-import { FormsModule, NgForm } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
+import { AuthService } from '../services/auth';
+import { SignUpPayload, SignUpResponse } from '../models/user.model';
 
 @Component({
-  selector: 'app-signup', // Le nom de la balise qu'on utilise pour afficher la page (<app-signup>)
+  selector: 'app-signup',
   standalone: true,
-  imports: [CommonModule, FormsModule], // On donne accès à FormsModule au composant
+  imports: [CommonModule, FormsModule],
   templateUrl: './signup.html',
   styleUrl: './signup.scss',
 })
 export class SignupComponent {
-  // Une boîte (un objet) qui stocke tout ce que l'utilisateur tape au clavier
-  user = {
-    login: '',
-    password: '',
-    confirmPassword: '',
-    nom: '',
-    prenom: '',
+  private authService = inject(AuthService);
+  private cdr = inject(ChangeDetectorRef);
+
+  formData: SignUpPayload = {
+    name: '',
     email: '',
+    password: '',
   };
 
-  // Vaut false au départ, passera à true quand le formulaire sera envoyé
-  isSubmitted = false;
+  response: SignUpResponse | null = null;
+  isLoading = false;
+  errorMessage = '';
 
-  // Fonction appelée quand on clique sur le bouton "Valider l'inscription"
-  onSubmit(form: NgForm): void {
-    // Si toutes les cases obligatoires sont remplies ET que les 2 mots de passe sont identiques
-    if (form.valid && this.user.password === this.user.confirmPassword) {
-      this.isSubmitted = true; // Déclenche l'affichage du message de confirmation
-      console.log('Données envoyées :', this.user);
-    }
+  onSubmit(): void {
+    this.isLoading = true;
+    this.errorMessage = '';
+    this.response = null;
+    this.cdr.markForCheck();
+
+    this.authService.signUp(this.formData).subscribe({
+      next: (res) => {
+        console.log('Réponse reçue :', res);
+        this.response = res;
+        this.isLoading = false;
+        this.cdr.markForCheck();
+      },
+      error: (err) => {
+        console.error('Erreur API :', err);
+        this.errorMessage = "Une erreur est survenue lors de l'inscription.";
+        this.isLoading = false;
+        this.cdr.markForCheck();
+      },
+    });
   }
 }
