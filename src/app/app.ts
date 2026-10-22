@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { SignupComponent } from './signup/signup';
+import { PollutionComponent } from './components/pollution/pollution';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [SignupComponent],
+  imports: [PollutionComponent],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })

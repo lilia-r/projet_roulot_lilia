@@ -1,0 +1,139 @@
+<div class="pollution-wrapper">
+  <header class="main-header">
+    <h1>REGISTRE DES POLLUTIONS</h1>
+  </header>
+
+  <div class="grid-layout">
+    <section class="card form-card">
+      <div class="accent-border"></div>
+      <h2>DÉCLARER UNE OBSERVATION</h2>
+
+      <form (ngSubmit)="onSubmit()" class="form-content">
+        <div class="field">
+          <label>TITRE</label>
+          <input
+            type="text"
+            [(ngModel)]="formData.titre"
+            name="titre"
+            placeholder="Ex: Décharge sauvage"
+            required
+          />
+        </div>
+
+        <div class="field">
+          <label>TYPE DE POLLUTION</label>
+          <select [(ngModel)]="formData.type" name="type">
+            <option *ngFor="let t of typesList" [value]="t">{{ t }}</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>LIEU</label>
+          <input
+            type="text"
+            [(ngModel)]="formData.lieu"
+            name="lieu"
+            placeholder="Commune, fleuve, zone..."
+            required
+          />
+        </div>
+
+        <div class="field">
+          <label>DATE D'OBSERVATION</label>
+          <input
+            type="date"
+            [(ngModel)]="formData.dateObservation"
+            name="dateObservation"
+            required
+          />
+        </div>
+
+        <div class="field">
+          <label>DESCRIPTION</label>
+          <textarea
+            [(ngModel)]="formData.description"
+            name="description"
+            rows="3"
+            placeholder="Détails du constat..."
+          ></textarea>
+        </div>
+
+        <button type="submit" class="cyber-btn" [disabled]="isLoading">
+          {{ isLoading ? 'ENVOI...' : 'DÉCLARER' }}
+        </button>
+      </form>
+    </section>
+
+    <section class="card list-card">
+      <div class="accent-border"></div>
+      <h2>HISTORIQUE DES SIGNALEMENTS</h2>
+
+      <div class="filters-bar">
+        <input
+          type="text"
+          [(ngModel)]="searchKeyword"
+          placeholder="Rechercher par titre ou lieu..."
+        />
+        <select [(ngModel)]="filterType">
+          <option value="">Tous les types</option>
+          <option *ngFor="let t of typesList" [value]="t">{{ t }}</option>
+        </select>
+      </div>
+
+      <div class="items-list">
+        <div *ngIf="filteredPollutions.length === 0" class="empty-state">
+          Aucune pollution répertoriée pour ces critères.
+        </div>
+
+        <div
+          *ngFor="let item of filteredPollutions"
+          class="item-row"
+          (click)="selectPollution(item)"
+          [class.active]="selectedPollution?.id === item.id"
+        >
+          <div class="item-info">
+            <span class="badge">{{ item.type }}</span>
+            <div class="item-title">{{ item.titre }}</div>
+            <div class="item-meta">{{ item.lieu }} — {{ item.dateObservation }}</div>
+          </div>
+
+          <div class="item-actions">
+            <button type="button" class="action-btn view-btn" (click)="selectPollution(item)">
+              Voir
+            </button>
+            <button
+              type="button"
+              class="action-btn delete-btn"
+              (click)="deleteItem(item.id, $event)"
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div *ngIf="selectedPollution" class="detail-overlay" (click)="closeDetail()">
+    <div class="detail-modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <span class="badge">{{ selectedPollution.type }}</span>
+        <h3>{{ selectedPollution.titre }}</h3>
+        <button class="close-btn" (click)="closeDetail()">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <p><strong>Lieu :</strong> {{ selectedPollution.lieu }}</p>
+        <p><strong>Date d'observation :</strong> {{ selectedPollution.dateObservation }}</p>
+        <p><strong>Description :</strong></p>
+        <div class="detail-description">
+          {{ selectedPollution.description || 'Aucune description détaillée.' }}
+        </div>
+        <p *ngIf="selectedPollution.latitude && selectedPollution.longitude">
+          <strong>Coordonnées :</strong> {{ selectedPollution.latitude }} /
+          {{ selectedPollution.longitude }}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
