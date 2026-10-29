@@ -1,5 +1,5 @@
 import { Sequelize } from 'sequelize';
-import definePollutions, { PollutionModel } from './pollutions.model';
+import definePollutions, { PollutionModel } from './pollution.model';
 
 const connectionUrl = process.env.DATABASE_URL;
 

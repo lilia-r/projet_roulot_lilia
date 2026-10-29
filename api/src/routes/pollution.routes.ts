@@ -1,5 +1,5 @@
 import { Application, Router } from 'express';
-import pollutionController from '../pollution.controllers';
+import pollutionController from '../controllers/pollution.controllers';
 
 export default (app: Application): void => {
   const router = Router();
