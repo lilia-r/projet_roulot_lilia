@@ -1,5 +1,6 @@
 import { Sequelize } from 'sequelize';
-import definePollutions, { PollutionModel } from './pollution.model';
+import { initPollutionModel } from './pollution.model';
+import { initUserModel } from './user.model';
 
 const connectionUrl = process.env.DATABASE_URL;
 
@@ -7,35 +8,25 @@ if (!connectionUrl) {
   throw new Error('La variable DATABASE_URL doit être définie pour connecter la base de données.');
 }
 
-const isLocalHost = connectionUrl.includes('localhost') || connectionUrl.includes('127.0.0.1');
-const useSsl = process.env.DB_SSL === 'true' || (process.env.DB_SSL !== 'false' && !isLocalHost);
-
 const sequelize = new Sequelize(connectionUrl, {
   dialect: 'postgres',
   protocol: 'postgres',
-  dialectOptions: useSsl
-    ? {
-        ssl: {
-          require: true,
-          rejectUnauthorized: false,
-        },
-      }
-    : {},
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false,
+    },
+  },
   define: {
     timestamps: false,
   },
 });
 
-export interface Database {
-  Sequelize: typeof Sequelize;
-  sequelize: Sequelize;
-  pollutions: PollutionModel;
-}
-
-export const db: Database = {
+export const db = {
   Sequelize,
   sequelize,
-  pollutions: definePollutions(sequelize, Sequelize),
+  pollutions: initPollutionModel(sequelize),
+  users: initUserModel(sequelize),
 };
 
 export default db;

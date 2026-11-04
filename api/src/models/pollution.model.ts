@@ -1,64 +1,44 @@
-import { Sequelize, DataTypes, Model, Optional, ModelStatic } from 'sequelize';
+import { DataTypes, Model, Sequelize } from 'sequelize';
 
-export interface PollutionAttributes {
-  id: number;
-  ville: string;
-  valeur: number;
-  polluant: string;
-  date: string;
-  description?: string | null;
+export class Pollution extends Model {
+  public id!: number;
+  public title!: string;
+  public description!: string;
+  public location!: string;
+  public level!: number;
 }
 
-export interface PollutionCreationAttributes extends Optional<
-  PollutionAttributes,
-  'id' | 'description'
-> {}
-
-export interface PollutionInstance
-  extends Model<PollutionAttributes, PollutionCreationAttributes>, PollutionAttributes {}
-
-export type PollutionModel = ModelStatic<PollutionInstance>;
-
-export default function definePollutions(
-  sequelize: Sequelize,
-  _seq?: typeof Sequelize,
-): PollutionModel {
-  const Pollutions = sequelize.define<PollutionInstance>(
-    'pollution',
+export const initPollutionModel = (sequelize: Sequelize) => {
+  Pollution.init(
     {
       id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,
-        allowNull: false,
       },
-      ville: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      valeur: {
-        type: DataTypes.FLOAT,
-        allowNull: false,
-      },
-      polluant: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      date: {
+      title: {
         type: DataTypes.STRING,
         allowNull: false,
       },
       description: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+      },
+      location: {
         type: DataTypes.STRING,
         allowNull: true,
       },
+      level: {
+        type: DataTypes.INTEGER,
+        defaultValue: 1,
+      },
     },
     {
-      tableName: 'pollution',
-      freezeTableName: true,
-      timestamps: false,
+      sequelize,
+      tableName: 'pollutions',
+      timestamps: true,
     },
   );
 
-  return Pollutions;
-}
+  return Pollution;
+};

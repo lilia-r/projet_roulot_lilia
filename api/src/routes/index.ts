@@ -1,6 +1,10 @@
-import { Application } from 'express';
+import { Router } from 'express';
 import pollutionRoutes from './pollution.routes';
+import userRoutes from './user.routes';
 
-export default (app: Application): void => {
-  pollutionRoutes(app);
-};
+const router = Router();
+
+router.use('/pollutions', pollutionRoutes);
+router.use('/users', userRoutes);
+
+export default router;
