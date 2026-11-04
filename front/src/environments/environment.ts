@@ -1,4 +1,4 @@
 export const environment = {
-  production: false,
-  apiUrl: 'https://pollution-front-u5fc.onrender.com/api',
+  production: true,
+  apiUrl: 'https://pollution-api-gnij.onrender.com/api',
 };
