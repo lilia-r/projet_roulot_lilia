@@ -17,11 +17,54 @@ export const getAllUsers = async (req: Request, res: Response) => {
 // POST /api/users
 export const createUser = async (req: Request, res: Response) => {
   try {
-    // Lit les informations reçues et crée un nouvel utilisateur dans la base.
     const { username, email, password } = req.body;
-    const newUser = await db.users.create({ username, email, password });
-    res.status(201).json(newUser);
+
+    // 1. Vérification de la présence et du caractère non vide des champs obligatoires
+    if (
+      typeof username !== 'string' ||
+      !username.trim() ||
+      typeof email !== 'string' ||
+      !email.trim() ||
+      typeof password !== 'string' ||
+      !password.trim()
+    ) {
+      return res.status(400).json({
+        message: 'Les champs username, email et password sont obligatoires.',
+      });
+    }
+
+    // 2. Vérification du format de l'email et de la longueur minimale du mot de passe
+    const normalizedEmail = email.trim().toLowerCase();
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(normalizedEmail)) {
+      return res.status(400).json({ message: 'Format d’email invalide.' });
+    }
+
+    if (password.length < 6) {
+      return res.status(400).json({
+        message: 'Le mot de passe doit contenir au moins 6 caractères.',
+      });
+    }
+
+    // 3. Vérification de l'unicité de l'email en base de données
+    const existingUser = await db.users.findOne({
+      where: { email: normalizedEmail },
+    });
+    if (existingUser) {
+      return res.status(409).json({ message: 'Cet email est déjà utilisé.' });
+    }
+
+    // 4. Création de l'utilisateur dans la base
+    const newUser = await db.users.create({
+      username: username.trim(),
+      email: normalizedEmail,
+      password,
+    });
+
+    // On renvoie l'utilisateur créé sans exposer son mot de passe
+    const { password: _, ...userWithoutPassword } = newUser.toJSON();
+    return res.status(201).json(userWithoutPassword);
   } catch (error) {
-    res.status(500).json({ message: 'Erreur création user', error });
+    return res.status(500).json({ message: 'Erreur création user', error });
   }
 };

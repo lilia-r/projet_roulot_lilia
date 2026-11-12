@@ -19,7 +19,7 @@ const sequelize = new Sequelize(connectionUrl, {
     },
   },
   define: {
-    timestamps: false,
+    timestamps: true,
   },
 });
 
