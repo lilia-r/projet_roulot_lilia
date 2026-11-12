@@ -1,8 +1,54 @@
-// Variables assorties à ton thème sombre et rouge
+// Variables assorties au thème sombre et rouge
+$bg-dark: #0f0f13;
+$panel-dark: #16161c;
+$border-dark: #25252d;
 $accent-red: #9e2a2b;
 $accent-glow: rgba(158, 42, 43, 0.45);
 
-// 1. Animation d'apparition douce
+// 1. Reset global et suppression des contours clairs
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background-color: $bg-dark;
+  color: #f4f4f6;
+  scrollbar-width: thin;
+  scrollbar-color: #2e2e36 #121216;
+}
+
+div,
+section,
+form,
+article,
+li {
+  border-color: $border-dark !important;
+}
+
+// 2. Barre de défilement sombre personnalisée (Chrome, Edge, Safari)
+::-webkit-scrollbar {
+  width: 6px !important;
+  height: 6px !important;
+}
+
+::-webkit-scrollbar-track {
+  background: #121216 !important;
+  border-radius: 4px !important;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2e2e36 !important;
+  border-radius: 4px !important;
+
+  &:hover {
+    background: $accent-red !important;
+  }
+}
+
+// 3. Animation d'apparition douce
 @keyframes fadeSlideUp {
   from {
     opacity: 0;
@@ -14,14 +60,14 @@ $accent-glow: rgba(158, 42, 43, 0.45);
   }
 }
 
-// 2. Apparition fluide des panneaux principaux au chargement
+// 4. Apparition fluide des panneaux principaux au chargement
 .card,
 form,
 section {
   animation: fadeSlideUp 0.5s ease-out forwards;
 }
 
-// 3. Effet lumineux sur les champs au clic
+// 5. Effet lumineux sur les champs de saisie au clic
 input,
 select,
 textarea {
@@ -38,7 +84,7 @@ textarea {
   }
 }
 
-// 4. Animation du bouton "DÉCLARER" au survol et au clic
+// 6. Animation du bouton "DÉCLARER" au survol et au clic
 button[type='submit'],
 .btn-declarer {
   cursor: pointer;
@@ -58,7 +104,7 @@ button[type='submit'],
   }
 }
 
-// 5. Animation sur chaque signalement dans l'historique
+// 7. Animation sur chaque signalement dans l'historique
 .pollution-item,
 .signalement-card,
 li {
@@ -70,25 +116,5 @@ li {
   &:hover {
     transform: translateX(6px);
     background-color: rgba(255, 255, 255, 0.03);
-  }
-}
-
-/* Personnalisation de la barre de défilement pour coller au thème sombre */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #121216;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #2e2e36;
-  border-radius: 4px;
-
-  &:hover {
-    background: #9e2a2b; // Devient rouge au survol
   }
 }
