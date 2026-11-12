@@ -1,6 +1,236 @@
-body,
-html {
+// Variables assorties au thème sombre et rouge
+$bg-dark: #0f0f13;
+$panel-dark: #16161c;
+$border-dark: #25252d;
+$accent-red: #9e2a2b;
+$accent-glow: rgba(158, 42, 43, 0.45);
+
+// 1. Reset global et suppression des contours clairs
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
   margin: 0;
   padding: 0;
-  background-color: #0c0d12;
+  background-color: $bg-dark;
+  color: #f4f4f6;
+  scrollbar-width: thin;
+  scrollbar-color: #2e2e36 #121216;
+}
+
+div,
+section,
+form,
+article,
+li {
+  border-color: $border-dark !important;
+}
+
+// 2. Barre de défilement sombre personnalisée (Chrome, Edge, Safari)
+::-webkit-scrollbar {
+  width: 6px !important;
+  height: 6px !important;
+}
+
+::-webkit-scrollbar-track {
+  background: #121216 !important;
+  border-radius: 4px !important;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2e2e36 !important;
+  border-radius: 4px !important;
+
+  &:hover {
+    background: $accent-red !important;
+  }
+}
+
+// 3. Animation d'apparition douce
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// 4. Apparition fluide des panneaux principaux au chargement
+.card,
+form,
+section {
+  animation: fadeSlideUp 0.5s ease-out forwards;
+}
+
+// 5. Effet lumineux sur les champs de saisie au clic
+input,
+select,
+textarea {
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.2s ease;
+
+  &:focus {
+    outline: none;
+    border-color: $accent-red !important;
+    box-shadow: 0 0 10px $accent-glow;
+    transform: translateY(-1px);
+  }
+}
+
+// 6. Animation du bouton "DÉCLARER" au survol et au clic
+button[type='submit'],
+.btn-declarer,
+.cyber-btn {
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    background-color 0.25s ease,
+    box-shadow 0.25s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    background-color: lighten($accent-red, 5%);
+    box-shadow: 0 6px 15px $accent-glow;
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
+}
+
+// 7. Grille de 2 cartes par ligne pour l'historique des signalements
+.items-list {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 12px !important;
+  align-items: stretch;
+}
+
+.items-list .empty-state {
+  grid-column: 1 / -1;
+}
+
+// 8. Style de chaque carte compacte avec texte centré au milieu et boutons en bas
+.items-list .item-row {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  text-align: center !important;
+  aspect-ratio: 4 / 3 !important; // Format plus compact en hauteur
+  width: 100% !important;
+  min-height: 155px !important;
+  max-height: 185px !important;
+  padding: 12px !important;
+  border-radius: 10px !important;
+  background-size: cover !important;
+  background-position: center !important;
+  position: relative;
+  overflow: hidden;
+  animation: fadeSlideUp 0.35s ease-out;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease !important;
+
+  &:hover {
+    transform: translateY(-4px) scale(1.02) !important;
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.75) !important;
+  }
+
+  .item-info {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    width: 100% !important;
+    margin: auto 0 !important;
+    gap: 4px;
+    z-index: 2;
+  }
+
+  .item-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    line-height: 1.2;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95);
+  }
+
+  .item-meta {
+    font-size: 0.75rem;
+    color: #e2e2ea;
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.95);
+  }
+
+  .item-actions {
+    display: flex !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    width: 100% !important;
+    z-index: 2;
+  }
+}
+
+// 9. Fonds illustratifs par type de pollution
+.bg-dechets {
+  background-image:
+    linear-gradient(
+      180deg,
+      rgba(16, 16, 22, 0.2) 0%,
+      rgba(16, 16, 22, 0.65) 50%,
+      rgba(16, 16, 22, 0.95) 100%
+    ),
+    url('https://images.unsplash.com/photo-1530587191325-3db32d826c18?auto=format&fit=crop&w=600&q=85') !important;
+}
+
+.bg-chimique,
+.bg-industriel {
+  background-image:
+    linear-gradient(
+      180deg,
+      rgba(16, 16, 22, 0.2) 0%,
+      rgba(16, 16, 22, 0.65) 50%,
+      rgba(16, 16, 22, 0.95) 100%
+    ),
+    url('https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=600&q=85') !important;
+}
+
+.bg-air {
+  background-image:
+    linear-gradient(
+      180deg,
+      rgba(16, 16, 22, 0.2) 0%,
+      rgba(16, 16, 22, 0.65) 50%,
+      rgba(16, 16, 22, 0.95) 100%
+    ),
+    url('https://images.unsplash.com/photo-1611273426858-450d8e3c9fce?auto=format&fit=crop&w=600&q=85') !important;
+}
+
+.bg-eau {
+  background-image:
+    linear-gradient(
+      180deg,
+      rgba(16, 16, 22, 0.2) 0%,
+      rgba(16, 16, 22, 0.65) 50%,
+      rgba(16, 16, 22, 0.95) 100%
+    ),
+    url('https://images.unsplash.com/photo-1583212292454-1fe6229603b7?auto=format&fit=crop&w=600&q=85') !important;
+}
+
+.bg-plastique {
+  background-image:
+    linear-gradient(
+      180deg,
+      rgba(16, 16, 22, 0.2) 0%,
+      rgba(16, 16, 22, 0.65) 50%,
+      rgba(16, 16, 22, 0.95) 100%
+    ),
+    url('https://images.unsplash.com/photo-1604187351574-c75ca79f5807?auto=format&fit=crop&w=600&q=85') !important;
 }

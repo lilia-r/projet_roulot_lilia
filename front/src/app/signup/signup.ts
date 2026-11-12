@@ -12,9 +12,11 @@ import { SignUpPayload, SignUpResponse } from '../models/user.model';
   styleUrl: './signup.scss',
 })
 export class SignupComponent {
+  // Services et états nécessaires au traitement de l'inscription.
   private authService = inject(AuthService);
   private cdr = inject(ChangeDetectorRef);
 
+  // Données saisies et résultat affiché à l'utilisateur.
   formData: SignUpPayload = {
     name: '',
     email: '',
@@ -26,6 +28,7 @@ export class SignupComponent {
   errorMessage = '';
 
   onSubmit(): void {
+    // Prépare l'écran puis envoie les données au service d'inscription.
     this.isLoading = true;
     this.errorMessage = '';
     this.response = null;
