@@ -92,6 +92,17 @@
           class="item-row"
           (click)="selectPollution(item)"
           [class.active]="selectedPollution?.id === item.id"
+          [ngClass]="{
+            'bg-dechets':
+              item.type?.toLowerCase().includes('déchet') ||
+              item.type?.toLowerCase().includes('dechet'),
+            'bg-chimique':
+              item.type?.toLowerCase().includes('chimique') ||
+              item.type?.toLowerCase().includes('industriel'),
+            'bg-air': item.type?.toLowerCase().includes('air'),
+            'bg-eau': item.type?.toLowerCase().includes('eau'),
+            'bg-plastique': item.type?.toLowerCase().includes('plastique'),
+          }"
         >
           <div class="item-info">
             <span class="badge">{{ item.type }}</span>
