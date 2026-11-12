@@ -105,11 +105,11 @@ button[type='submit'],
   }
 }
 
-// 7. Grille de 2 carrés par ligne pour l'historique des signalements
+// 7. Grille de 2 cartes par ligne pour l'historique des signalements
 .items-list {
   display: grid !important;
   grid-template-columns: repeat(2, 1fr) !important;
-  gap: 14px !important;
+  gap: 12px !important;
   align-items: stretch;
 }
 
@@ -117,17 +117,18 @@ button[type='submit'],
   grid-column: 1 / -1;
 }
 
-// 8. Style de chaque carte carrée avec texte centré au milieu et boutons en bas
+// 8. Style de chaque carte compacte avec texte centré au milieu et boutons en bas
 .items-list .item-row {
   display: flex !important;
   flex-direction: column !important;
   justify-content: space-between !important;
   align-items: center !important;
   text-align: center !important;
-  aspect-ratio: 1 / 1 !important;
+  aspect-ratio: 4 / 3 !important; // Format plus compact en hauteur
   width: 100% !important;
-  min-height: 200px;
-  padding: 16px !important;
+  min-height: 155px !important;
+  max-height: 185px !important;
+  padding: 12px !important;
   border-radius: 10px !important;
   background-size: cover !important;
   background-position: center !important;
@@ -151,19 +152,19 @@ button[type='submit'],
     text-align: center !important;
     width: 100% !important;
     margin: auto 0 !important;
-    gap: 6px;
+    gap: 4px;
     z-index: 2;
   }
 
   .item-title {
-    font-size: 1.05rem;
+    font-size: 0.95rem;
     font-weight: 700;
-    line-height: 1.25;
+    line-height: 1.2;
     text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95);
   }
 
   .item-meta {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     color: #e2e2ea;
     text-shadow: 0 1px 6px rgba(0, 0, 0, 0.95);
   }
