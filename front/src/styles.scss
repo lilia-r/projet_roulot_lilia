@@ -72,3 +72,23 @@ li {
     background-color: rgba(255, 255, 255, 0.03);
   }
 }
+
+/* Personnalisation de la barre de défilement pour coller au thème sombre */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #121216;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2e2e36;
+  border-radius: 4px;
+
+  &:hover {
+    background: #9e2a2b; // Devient rouge au survol
+  }
+}
