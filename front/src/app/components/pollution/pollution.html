@@ -29,6 +29,21 @@
         </div>
 
         <div class="field">
+          <label
+            >INDICE DE DANGEROSITÉ (0-101+) — Statut : {{ formData.level | pollutionLevel }}</label
+          >
+          <input
+            type="number"
+            [(ngModel)]="formData.level"
+            name="level"
+            min="0"
+            max="500"
+            placeholder="Ex: 15, 35, 75, 120"
+            required
+          />
+        </div>
+
+        <div class="field">
           <label>LIEU</label>
           <input
             type="text"
@@ -90,6 +105,7 @@
         <div
           *ngFor="let item of filteredPollutions"
           class="item-row"
+          [appHighlightPollution]="item.level ?? 15"
           (click)="selectPollution(item)"
           [class.active]="selectedPollution?.id === item.id"
           [ngClass]="{
@@ -105,7 +121,7 @@
           }"
         >
           <div class="item-info">
-            <span class="badge">{{ item.type }}</span>
+            <span class="badge"> {{ item.type }} • {{ item.level ?? 15 | pollutionLevel }} </span>
             <div class="item-title">{{ item.titre }}</div>
             <div class="item-meta">{{ item.lieu }} — {{ item.dateObservation }}</div>
           </div>
@@ -131,13 +147,19 @@
   <div *ngIf="selectedPollution" class="detail-overlay" (click)="closeDetail()">
     <div class="detail-modal" (click)="$event.stopPropagation()">
       <div class="modal-header">
-        <span class="badge">{{ selectedPollution.type }}</span>
+        <span class="badge">
+          {{ selectedPollution.type }} • {{ selectedPollution.level ?? 15 | pollutionLevel }}
+        </span>
         <h3>{{ selectedPollution.titre }}</h3>
         <button class="close-btn" (click)="closeDetail()">✕</button>
       </div>
 
       <div class="modal-body">
         <p><strong>Lieu :</strong> {{ selectedPollution.lieu }}</p>
+        <p>
+          <strong>Niveau de dangerosité :</strong>
+          {{ selectedPollution.level ?? 15 }} ({{ selectedPollution.level ?? 15 | pollutionLevel }})
+        </p>
         <p><strong>Date d'observation :</strong> {{ selectedPollution.dateObservation }}</p>
         <p><strong>Description :</strong></p>
         <div class="detail-description">

@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
-import { PollutionComponent } from './components/pollution/pollution';
+import { RouterOutlet } from '@angular/router';
 
-// Composant racine : il affiche l'écran principal de l'application.
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [PollutionComponent],
+  imports: [RouterOutlet],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
