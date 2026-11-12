@@ -7,6 +7,7 @@ import {
 
 const router = Router();
 
+// Associe chaque adresse et méthode HTTP à son contrôleur.
 router.get('/', getAllPollutions);
 router.post('/', createPollution);
 router.delete('/:id', deletePollution);

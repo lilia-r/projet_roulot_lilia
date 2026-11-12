@@ -3,6 +3,7 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideHttpClient } from '@angular/common/http';
 
+// Services disponibles dans toute l'application Angular.
 export const appConfig: ApplicationConfig = {
   providers: [provideZonelessChangeDetection(), provideRouter(routes), provideHttpClient()],
 };

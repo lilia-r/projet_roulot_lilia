@@ -1,6 +1,7 @@
 import { DataTypes, Model, Sequelize } from 'sequelize';
 
 export class User extends Model {
+  // Informations associées à un compte utilisateur.
   public id!: number;
   public username!: string;
   public email!: string;
@@ -8,6 +9,7 @@ export class User extends Model {
 }
 
 export const initUserModel = (sequelize: Sequelize) => {
+  // Décrit les colonnes de la table utilisateur.
   User.init(
     {
       id: {

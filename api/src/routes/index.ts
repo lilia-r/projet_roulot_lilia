@@ -4,6 +4,7 @@ import userRoutes from './user.routes';
 
 const router = Router();
 
+// Regroupe les routes par type de ressource.
 router.use('/pollutions', pollutionRoutes);
 router.use('/users', userRoutes);
 

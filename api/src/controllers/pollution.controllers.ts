@@ -4,6 +4,7 @@ import db from '../models';
 // GET /api/pollutions
 export const getAllPollutions = async (req: Request, res: Response) => {
   try {
+    // Récupère les signalements puis adapte leurs champs au format attendu par l'interface.
     const list = await db.pollutions.findAll({
       order: [['id', 'DESC']],
     });
@@ -39,6 +40,7 @@ export const getAllPollutions = async (req: Request, res: Response) => {
 // POST /api/pollutions
 export const createPollution = async (req: Request, res: Response) => {
   try {
+    // Lit le formulaire et prépare les valeurs enregistrées dans la base.
     const body = req.body;
     const title = body.titre || body.title || 'Signalement';
     const location = body.lieu || body.location || 'Strasbourg';
@@ -80,6 +82,7 @@ export const createPollution = async (req: Request, res: Response) => {
 // DELETE /api/pollutions/:id
 export const deletePollution = async (req: Request, res: Response) => {
   try {
+    // Vérifie l'identifiant avant de supprimer l'enregistrement correspondant.
     const id = req.params.id;
     if (!id || id === 'undefined') {
       return res.status(400).json({ message: 'Identifiant manquant' });

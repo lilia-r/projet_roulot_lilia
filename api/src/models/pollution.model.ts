@@ -1,6 +1,7 @@
 import { DataTypes, Model, Sequelize } from 'sequelize';
 
 export class Pollution extends Model {
+  // Champs enregistrés pour chaque signalement de pollution.
   public id!: number;
   public title!: string;
   public description!: string;
@@ -9,6 +10,7 @@ export class Pollution extends Model {
 }
 
 export const initPollutionModel = (sequelize: Sequelize) => {
+  // Décrit les colonnes de la table et leurs règles.
   Pollution.init(
     {
       id: {

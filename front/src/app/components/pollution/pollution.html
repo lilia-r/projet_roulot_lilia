@@ -1,4 +1,5 @@
 <div class="pollution-wrapper">
+  <!-- En-tête et formulaire de création d'un signalement. -->
   <header class="main-header">
     <h1>REGISTRE DES POLLUTIONS</h1>
   </header>
@@ -64,6 +65,7 @@
       </form>
     </section>
 
+    <!-- Liste des signalements, avec recherche et filtre par type. -->
     <section class="card list-card">
       <div class="accent-border"></div>
       <h2>HISTORIQUE DES SIGNALEMENTS</h2>
@@ -114,6 +116,7 @@
     </section>
   </div>
 
+  <!-- Fenêtre de détails visible lorsqu'un signalement est sélectionné. -->
   <div *ngIf="selectedPollution" class="detail-overlay" (click)="closeDetail()">
     <div class="detail-modal" (click)="$event.stopPropagation()">
       <div class="modal-header">

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { PollutionComponent } from './components/pollution/pollution';
 
+// Composant racine : il affiche l'écran principal de l'application.
 @Component({
   selector: 'app-root',
   standalone: true,

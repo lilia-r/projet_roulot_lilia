@@ -4,6 +4,7 @@ import { initUserModel } from './user.model';
 
 const connectionUrl = process.env.DATABASE_URL;
 
+// La base de données doit être configurée dans les variables d'environnement.
 if (!connectionUrl) {
   throw new Error('La variable DATABASE_URL doit être définie pour connecter la base de données.');
 }
@@ -22,6 +23,7 @@ const sequelize = new Sequelize(connectionUrl, {
   },
 });
 
+// Prépare les modèles utilisés par les contrôleurs.
 export const db = {
   Sequelize,
   sequelize,
