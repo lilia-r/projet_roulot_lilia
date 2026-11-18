@@ -1,6 +1,6 @@
 export interface Pollution {
   // Informations principales affichées pour un signalement.
-  id: number;
+  id?: number | string;
   titre: string;
   type: string;
   description?: string;

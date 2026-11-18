@@ -2,11 +2,11 @@
 
 :host {
   display: block;
-  min-height: 100vh;
-  background-color: #0c0d12;
+  min-height: calc(100vh - 120px);
+  background: transparent;
   color: #e2e8f0;
   font-family: 'Rajdhani', sans-serif;
-  padding: 40px 20px;
+  padding: 20px;
   box-sizing: border-box;
 }
 
@@ -24,15 +24,17 @@
   color: #ffffff;
   margin-bottom: 28px;
   text-transform: uppercase;
+  text-shadow: 0 0 18px rgba(255, 30, 86, 0.35);
 }
 
 .form-card {
   position: relative;
-  background: #12141a;
+  background: rgba(18, 20, 26, 0.88);
+  backdrop-filter: blur(8px);
   border: 1px solid #232733;
   border-radius: 4px;
   padding: 32px 28px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.65);
   clip-path: polygon(
     0 0,
     calc(100% - 14px) 0,

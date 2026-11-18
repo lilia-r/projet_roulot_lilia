@@ -1,5 +1,7 @@
+@use 'sass:color';
+
 // Variables assorties au thème sombre et rouge
-$bg-dark: #0f0f13;
+$bg-dark: #08080a;
 $panel-dark: #16161c;
 $border-dark: #25252d;
 $accent-red: #9e2a2b;
@@ -96,7 +98,7 @@ button[type='submit'],
 
   &:hover {
     transform: translateY(-2px);
-    background-color: lighten($accent-red, 5%);
+    background-color: color.adjust($accent-red, $lightness: 5%);
     box-shadow: 0 6px 15px $accent-glow;
   }
 
@@ -124,7 +126,7 @@ button[type='submit'],
   justify-content: space-between !important;
   align-items: center !important;
   text-align: center !important;
-  aspect-ratio: 4 / 3 !important; // Format plus compact en hauteur
+  aspect-ratio: 4 / 3 !important;
   width: 100% !important;
   min-height: 155px !important;
   max-height: 185px !important;
@@ -232,5 +234,5 @@ button[type='submit'],
       rgba(16, 16, 22, 0.65) 50%,
       rgba(16, 16, 22, 0.95) 100%
     ),
-    url('https://images.unsplash.com/photo-1604187351574-c75ca79f5807?auto=format&fit=crop&w=600&q=85') !important;
+    url('https://images.unsplash.com/photo-1530587191325-3db32d826c18?auto=format&fit=crop&w=600&q=85') !important;
 }

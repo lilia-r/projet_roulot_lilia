@@ -1,8 +1,7 @@
 <div class="signup-page">
-  <h1 class="page-title">INSCRIPTION</h1>
+  <h1 class="page-title" appCyberReveal [delay]="0">ACCÈS AU SYSTÈME</h1>
 
-  <!-- Formulaire relié aux données du composant avec ngModel. -->
-  <div class="form-card">
+  <div class="form-card" appCyberReveal [delay]="0.12">
     <div class="accent-border"></div>
 
     <form (ngSubmit)="onSubmit()" class="form-content">
@@ -13,7 +12,7 @@
           type="text"
           [(ngModel)]="formData.name"
           name="name"
-          placeholder="Ex: Jean Dupont"
+          placeholder="Ex: Lilia Roulot"
           required
           autocomplete="off"
         />
@@ -45,13 +44,22 @@
       </div>
 
       <button type="submit" class="submit-btn" [disabled]="isLoading">
-        {{ isLoading ? 'ENVOI EN COURS...' : "S'INSCRIRE" }}
+        {{ isLoading ? 'CONNEXION EN COURS...' : "S'INSCRIRE & ACCÉDER" }}
+      </button>
+
+      <button
+        type="button"
+        class="submit-btn"
+        style="margin-top: 10px; background: transparent; border: 1px solid #8b1e3f"
+        (click)="demoAccess()"
+      >
+        ACCÈS DIRECT (MODE DÉMO)
       </button>
     </form>
 
     <!-- Message de confirmation -->
-    <div *ngIf="response" class="status-box success">
-      <div class="status-title">{{ response.message }}</div>
+    <div *ngIf="response" class="status-box success" appCyberReveal [delay]="0">
+      <div class="status-title">{{ response.message }} — Redirection...</div>
       <div class="status-details">
         <span><strong>ID :</strong> {{ response.user.id }}</span>
         <span><strong>NOM :</strong> {{ response.user.name }}</span>
@@ -60,7 +68,7 @@
     </div>
 
     <!-- Message d'erreur -->
-    <div *ngIf="errorMessage" class="status-box error">
+    <div *ngIf="errorMessage" class="status-box error" appCyberReveal [delay]="0">
       {{ errorMessage }}
     </div>
   </div>
