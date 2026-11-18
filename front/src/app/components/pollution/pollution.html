@@ -1,11 +1,12 @@
 <div class="pollution-wrapper">
-  <!-- En-tête et formulaire de création d'un signalement. -->
-  <header class="main-header">
+  <!-- En-tête -->
+  <header class="main-header" appCyberReveal [delay]="0">
     <h1>REGISTRE DES POLLUTIONS</h1>
   </header>
 
   <div class="grid-layout">
-    <section class="card form-card">
+    <!-- Formulaire de création d'un signalement -->
+    <section class="card form-card" appCyberReveal [delay]="0.1">
       <div class="accent-border"></div>
       <h2>DÉCLARER UNE OBSERVATION</h2>
 
@@ -80,8 +81,8 @@
       </form>
     </section>
 
-    <!-- Liste des signalements, avec recherche et filtre par type. -->
-    <section class="card list-card">
+    <!-- Liste des signalements -->
+    <section class="card list-card" appCyberReveal [delay]="0.2">
       <div class="accent-border"></div>
       <h2>HISTORIQUE DES SIGNALEMENTS</h2>
 
@@ -103,21 +104,28 @@
         </div>
 
         <div
-          *ngFor="let item of filteredPollutions"
+          *ngFor="let item of filteredPollutions; let i = index"
           class="item-row"
+          appCyberReveal
+          [delay]="i * 0.05"
           [appHighlightPollution]="item.level ?? 15"
           (click)="selectPollution(item)"
           [class.active]="selectedPollution?.id === item.id"
           [ngClass]="{
+            'bg-chimique':
+              item.type?.toLowerCase().includes('chimique') ||
+              item.titre?.toLowerCase().includes('chimique') ||
+              item.type?.toLowerCase().includes('industriel'),
+            'bg-air':
+              item.type?.toLowerCase().includes('air') || item.titre?.toLowerCase().includes('air'),
+            'bg-eau':
+              item.type?.toLowerCase().includes('eau') || item.titre?.toLowerCase().includes('eau'),
+            'bg-plastique':
+              item.type?.toLowerCase().includes('plastique') ||
+              item.titre?.toLowerCase().includes('plastique'),
             'bg-dechets':
               item.type?.toLowerCase().includes('déchet') ||
               item.type?.toLowerCase().includes('dechet'),
-            'bg-chimique':
-              item.type?.toLowerCase().includes('chimique') ||
-              item.type?.toLowerCase().includes('industriel'),
-            'bg-air': item.type?.toLowerCase().includes('air'),
-            'bg-eau': item.type?.toLowerCase().includes('eau'),
-            'bg-plastique': item.type?.toLowerCase().includes('plastique'),
           }"
         >
           <div class="item-info">
@@ -143,32 +151,106 @@
     </section>
   </div>
 
-  <!-- Fenêtre de détails visible lorsqu'un signalement est sélectionné. -->
+  <!-- Fenêtre de détails HUD Cyberpunk -->
   <div *ngIf="selectedPollution" class="detail-overlay" (click)="closeDetail()">
-    <div class="detail-modal" (click)="$event.stopPropagation()">
-      <div class="modal-header">
-        <span class="badge">
-          {{ selectedPollution.type }} • {{ selectedPollution.level ?? 15 | pollutionLevel }}
-        </span>
-        <h3>{{ selectedPollution.titre }}</h3>
-        <button class="close-btn" (click)="closeDetail()">✕</button>
+    <div class="detail-modal" appCyberReveal [delay]="0" (click)="$event.stopPropagation()">
+      <div class="modal-accent-bar"></div>
+
+      <!-- Bannière visuelle dynamique selon le type -->
+      <div
+        class="modal-hero"
+        [ngClass]="{
+          'bg-chimique':
+            selectedPollution.type?.toLowerCase().includes('chimique') ||
+            selectedPollution.titre?.toLowerCase().includes('chimique') ||
+            selectedPollution.type?.toLowerCase().includes('industriel'),
+          'bg-air':
+            selectedPollution.type?.toLowerCase().includes('air') ||
+            selectedPollution.titre?.toLowerCase().includes('air'),
+          'bg-eau':
+            selectedPollution.type?.toLowerCase().includes('eau') ||
+            selectedPollution.titre?.toLowerCase().includes('eau'),
+          'bg-plastique':
+            selectedPollution.type?.toLowerCase().includes('plastique') ||
+            selectedPollution.titre?.toLowerCase().includes('plastique'),
+          'bg-dechets':
+            selectedPollution.type?.toLowerCase().includes('déchet') ||
+            selectedPollution.type?.toLowerCase().includes('dechet'),
+        }"
+      >
+        <div class="hero-top">
+          <span class="file-code">DOSSIER // #{{ selectedPollution.id || '001' }}</span>
+          <button type="button" class="close-btn" (click)="closeDetail()" title="Fermer">✕</button>
+        </div>
+
+        <div class="hero-bottom">
+          <span class="badge">
+            {{ selectedPollution.type }} • {{ selectedPollution.level ?? 15 | pollutionLevel }}
+          </span>
+          <h3>{{ selectedPollution.titre }}</h3>
+        </div>
       </div>
 
+      <!-- Corps télémétrique -->
       <div class="modal-body">
-        <p><strong>Lieu :</strong> {{ selectedPollution.lieu }}</p>
-        <p>
-          <strong>Niveau de dangerosité :</strong>
-          {{ selectedPollution.level ?? 15 }} ({{ selectedPollution.level ?? 15 | pollutionLevel }})
-        </p>
-        <p><strong>Date d'observation :</strong> {{ selectedPollution.dateObservation }}</p>
-        <p><strong>Description :</strong></p>
-        <div class="detail-description">
-          {{ selectedPollution.description || 'Aucune description détaillée.' }}
+        <!-- Jauge visuelle de dangerosité -->
+        <div class="danger-meter">
+          <div class="meter-header">
+            <span class="meter-label">INDICE DE DANGEROSITÉ</span>
+            <span class="meter-value">
+              {{ selectedPollution.level ?? 15 }} / 100+ —
+              <strong>{{ selectedPollution.level ?? 15 | pollutionLevel }}</strong>
+            </span>
+          </div>
+          <div class="meter-track">
+            <div
+              class="meter-fill"
+              [style.width.%]="
+                (selectedPollution.level ?? 15) > 100 ? 100 : (selectedPollution.level ?? 15)
+              "
+            ></div>
+          </div>
         </div>
-        <p *ngIf="selectedPollution.latitude && selectedPollution.longitude">
-          <strong>Coordonnées :</strong> {{ selectedPollution.latitude }} /
-          {{ selectedPollution.longitude }}
-        </p>
+
+        <!-- Grille d'informations clés -->
+        <div class="telemetry-grid">
+          <div class="telemetry-cell">
+            <span class="cell-label">LOCALISATION</span>
+            <span class="cell-value">{{ selectedPollution.lieu }}</span>
+          </div>
+
+          <div class="telemetry-cell">
+            <span class="cell-label">DATE DU RELEVÉ</span>
+            <span class="cell-value">{{ selectedPollution.dateObservation }}</span>
+          </div>
+
+          <div
+            class="telemetry-cell full-span"
+            *ngIf="selectedPollution.latitude && selectedPollution.longitude"
+          >
+            <span class="cell-label">COORDONNÉES GPS</span>
+            <span class="cell-value">
+              {{ selectedPollution.latitude }}° N / {{ selectedPollution.longitude }}° E
+            </span>
+          </div>
+        </div>
+
+        <!-- Rapport de terrain -->
+        <div class="report-section">
+          <span class="cell-label">RAPPORT D'ANALYSE TERRAIN</span>
+          <div class="detail-description">
+            {{
+              selectedPollution.description ||
+                'Aucune observation complémentaire enregistrée pour ce relevé.'
+            }}
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="cyber-btn close-footer-btn" (click)="closeDetail()">
+            FERMER LE DOSSIER
+          </button>
+        </div>
       </div>
     </div>
   </div>

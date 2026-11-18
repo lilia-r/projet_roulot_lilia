@@ -1,0 +1,244 @@
+.cyber-shell {
+  position: relative;
+  min-height: 100vh;
+  background-color: #08080a;
+  color: #f4f4f5;
+  font-family: 'Rajdhani', 'Segoe UI', sans-serif;
+  overflow-x: hidden;
+}
+
+/* --- SYSTÈME DE FOND LASER INTERACTIF --- */
+.laser-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* Grille de fond discrète sur tout l'écran */
+.grid-base {
+  position: absolute;
+  inset: -40px;
+  background-image:
+    linear-gradient(rgba(220, 20, 60, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(220, 20, 60, 0.07) 1px, transparent 1px);
+  background-size: 48px 48px;
+  transform: translate(calc((var(--px, 50%) - 50%) * -0.15), calc((var(--py, 50%) - 50%) * -0.15));
+  transition: transform 0.12s ease-out;
+}
+
+/* Grille néon haute intensité révélée uniquement autour de la souris */
+.grid-illuminated {
+  position: absolute;
+  inset: -40px;
+  background-image:
+    linear-gradient(rgba(255, 30, 86, 0.42) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 30, 86, 0.42) 1px, transparent 1px),
+    radial-gradient(
+      circle 280px at var(--mx, -500px) var(--my, -500px),
+      rgba(190, 18, 60, 0.18),
+      transparent 75%
+    );
+  background-size:
+    48px 48px,
+    48px 48px,
+    100% 100%;
+  -webkit-mask-image: radial-gradient(
+    circle 260px at var(--mx, -500px) var(--my, -500px),
+    #000 0%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    circle 260px at var(--mx, -500px) var(--my, -500px),
+    #000 0%,
+    transparent 100%
+  );
+  transform: translate(calc((var(--px, 50%) - 50%) * -0.15), calc((var(--py, 50%) - 50%) * -0.15));
+}
+
+/* Faisceau laser horizontal qui suit Y */
+.laser-beam-h {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: var(--my, -100px);
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 30, 86, 0.15) 20%,
+    rgba(255, 30, 86, 0.85) 50%,
+    rgba(255, 30, 86, 0.15) 80%,
+    transparent 100%
+  );
+  box-shadow: 0 0 12px rgba(255, 30, 86, 0.75);
+}
+
+/* Faisceau laser vertical qui suit X */
+.laser-beam-v {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--mx, -100px);
+  width: 1px;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(255, 30, 86, 0.15) 20%,
+    rgba(255, 30, 86, 0.85) 50%,
+    rgba(255, 30, 86, 0.15) 80%,
+    transparent 100%
+  );
+  box-shadow: 0 0 12px rgba(255, 30, 86, 0.75);
+}
+
+/* Balayage radar vertical continu */
+.laser-scanline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(220, 20, 60, 0.35), transparent);
+  animation: radarSweep 7s linear infinite;
+}
+
+@keyframes radarSweep {
+  0% {
+    top: -5%;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    top: 105%;
+    opacity: 0;
+  }
+}
+
+/* --- TOPBAR HUD --- */
+.cyber-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.9rem 2rem;
+  background: rgba(10, 10, 13, 0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(220, 20, 60, 0.45);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.75);
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.brand-link {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  text-decoration: none;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 1.15rem;
+  letter-spacing: 0.14em;
+}
+
+.brand-pulse {
+  width: 9px;
+  height: 9px;
+  background: #ff1e56;
+  box-shadow: 0 0 10px #ff1e56;
+  transform: rotate(45deg);
+}
+
+.status-tag {
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  padding: 0.25rem 0.65rem;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #a1a1aa;
+  background: rgba(24, 24, 27, 0.75);
+
+  &.online {
+    border-color: rgba(255, 30, 86, 0.55);
+    color: #fda4af;
+  }
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.hud-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 1rem;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  color: #f4f4f5;
+  background: rgba(20, 20, 24, 0.88);
+  border: 1px solid rgba(220, 20, 60, 0.55);
+  clip-path: polygon(
+    0 0,
+    calc(100% - 10px) 0,
+    100% 10px,
+    100% 100%,
+    10px 100%,
+    0 calc(100% - 10px)
+  );
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  svg {
+    color: #ff1e56;
+    transition: transform 0.2s ease;
+  }
+
+  &:hover {
+    background: rgba(159, 18, 57, 0.35);
+    border-color: #ff1e56;
+    box-shadow: 0 0 16px rgba(255, 30, 86, 0.35);
+
+    svg {
+      transform: translateX(2px);
+    }
+  }
+}
+
+.logout-btn {
+  border-color: rgba(244, 63, 94, 0.7);
+  background: rgba(136, 19, 55, 0.25);
+
+  &:hover {
+    background: #be123c;
+    color: #ffffff;
+
+    svg {
+      color: #ffffff;
+    }
+  }
+}
+
+/* Contenu au-dessus de la grille laser */
+.cyber-viewport {
+  position: relative;
+  z-index: 10;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
