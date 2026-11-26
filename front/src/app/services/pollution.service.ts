@@ -1,39 +1,53 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { environment } from '../../environments/environment';
+import { Observable, map } from 'rxjs';
 import { Pollution } from '../models/pollution.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PollutionService {
-  // Adresse de base des requêtes consacrées aux signalements.
   private http = inject(HttpClient);
   private apiUrl = `${environment.apiUrl}/pollutions`;
 
-  // Demande au serveur la liste des signalements.
   getPollutions(): Observable<Pollution[]> {
-    return this.http.get<Pollution[]>(this.apiUrl);
+    return this.http
+      .get<any[]>(this.apiUrl)
+      .pipe(map((items) => items.map((item) => this.normalizePollution(item))));
   }
 
-  // Demande un signalement précis à partir de son identifiant.
-  getPollutionById(id: number): Observable<Pollution> {
-    return this.http.get<Pollution>(`${this.apiUrl}/${id}`);
+  addPollution(pollution: Pollution): Observable<Pollution> {
+    const payload = {
+      ...pollution,
+      type_pollution: pollution.type,
+    };
+    return this.http
+      .post<any>(this.apiUrl, payload)
+      .pipe(map((item) => this.normalizePollution(item)));
   }
 
-  // Envoie un nouveau signalement au serveur.
-  addPollution(pollution: Omit<Pollution, 'id'>): Observable<Pollution> {
-    return this.http.post<Pollution>(this.apiUrl, pollution);
+  deletePollution(id: number | string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
-  // Envoie les champs à modifier pour un signalement.
-  updatePollution(id: number, pollution: Partial<Pollution>): Observable<Pollution> {
-    return this.http.put<Pollution>(`${this.apiUrl}/${id}`, pollution);
-  }
+  private normalizePollution(item: any): Pollution {
+    const rawType = item.type_pollution || item.type || 'Déchets';
+    const titre = (item.titre || '').toLowerCase();
 
-  // Demande la suppression d'un signalement.
-  deletePollution(id: number): Observable<{ success: boolean; id: number }> {
-    return this.http.delete<{ success: boolean; id: number }>(`${this.apiUrl}/${id}`);
+    // Corrige automatiquement les anciens enregistrements restés sur "Déchets"
+    let resolvedType = rawType;
+    if (rawType.toLowerCase().includes('déchet') || rawType.toLowerCase().includes('dechet')) {
+      if (titre.includes('air')) resolvedType = 'Air';
+      else if (titre.includes('eau')) resolvedType = 'Eau';
+      else if (titre.includes('chimique')) resolvedType = 'Chimique';
+      else if (titre.includes('plastique')) resolvedType = 'Plastique';
+    }
+
+    return {
+      ...item,
+      type: resolvedType,
+      dateObservation: item.dateObservation || item.date_observation,
+    };
   }
 }

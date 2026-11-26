@@ -42,3 +42,19 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+# Dépendances Node
+node_modules/
+front/node_modules/
+api/node_modules/
+
+# Fichiers compilés Angular et Node
+dist/
+front/dist/
+api/dist/
+.angular/
+front/.angular/
+
+# Variables d'environnement et logs
+.env
+*.log
