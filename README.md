@@ -7,7 +7,8 @@ Application web développée avec **Angular 22** permettant de déclarer, filtre
 ## Fonctionnalités principales
 
 - **Authentification & Accès sécurisé (`/signup`)** :
-  - Inscription et connexion d'opérateur avec gestion de session via `localStorage` et mode accès rapide.
+  - Inscription d'opérateur via la route backend `POST /api/signup` (validation et enregistrement en base PostgreSQL).
+  - *Note TP* : la persistance de session côté frontend repose volontairement sur `localStorage` (`user_session`) sans jeton JWT afin de rester dans le périmètre du TP.
   - Barre supérieure persistante affichant l'état de la session en temps réel et permettant la déconnexion sécurisée.
 - **Protection des routes (`Guards` fonctionnels)** :
   - **`AuthGuard`** : restreint l'accès au registre (`/pollutions`) aux utilisateurs connectés et redirige automatiquement vers `/signup` si aucune session n'est active.
@@ -37,7 +38,7 @@ Application web développée avec **Angular 22** permettant de déclarer, filtre
 ## Structure du projet
 
 ```text
-front/
+Front/
 └── src/
     ├── app/
     │   ├── components/

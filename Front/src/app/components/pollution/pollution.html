@@ -1,0 +1,229 @@
+<div class="pollution-wrapper">
+  <!-- En-tête -->
+  <header class="main-header" appCyberReveal [delay]="0">
+    <h1>REGISTRE DES POLLUTIONS</h1>
+  </header>
+
+  <div class="grid-layout">
+    <!-- Formulaire de création d'un signalement -->
+    <section class="card form-card" appCyberReveal [delay]="0.1">
+      <div class="accent-border"></div>
+      <h2>DÉCLARER UNE OBSERVATION</h2>
+
+      <form (ngSubmit)="onSubmit()" class="form-content">
+        <div class="field">
+          <label>TITRE</label>
+          <input
+            type="text"
+            [(ngModel)]="formData.titre"
+            name="titre"
+            placeholder="Ex: Décharge sauvage"
+            required
+          />
+        </div>
+
+        <div class="field">
+          <label>TYPE DE POLLUTION</label>
+          <select [(ngModel)]="formData.type" name="type">
+            @for (t of typesList; track t) {
+              <option [value]="t">{{ t }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="field">
+          <label
+            >INDICE DE DANGEROSITÉ (0-101+) — Statut : {{ formData.level | pollutionLevel }}</label
+          >
+          <input
+            type="number"
+            [(ngModel)]="formData.level"
+            name="level"
+            min="0"
+            max="500"
+            placeholder="Ex: 15, 35, 75, 120"
+            required
+          />
+        </div>
+
+        <div class="field">
+          <label>LIEU</label>
+          <input
+            type="text"
+            [(ngModel)]="formData.lieu"
+            name="lieu"
+            placeholder="Commune, fleuve, zone..."
+            required
+          />
+        </div>
+
+        <div class="field">
+          <label>DATE D'OBSERVATION</label>
+          <input
+            type="date"
+            [(ngModel)]="formData.dateObservation"
+            name="dateObservation"
+            required
+          />
+        </div>
+
+        <div class="field">
+          <label>DESCRIPTION</label>
+          <textarea
+            [(ngModel)]="formData.description"
+            name="description"
+            rows="3"
+            placeholder="Détails du constat..."
+          ></textarea>
+        </div>
+
+        <button type="submit" class="cyber-btn" [disabled]="isLoading">
+          {{ isLoading ? 'ENVOI...' : 'DÉCLARER' }}
+        </button>
+      </form>
+    </section>
+
+    <!-- Liste des signalements -->
+    <section class="card list-card" appCyberReveal [delay]="0.2">
+      <div class="accent-border"></div>
+      <h2>HISTORIQUE DES SIGNALEMENTS</h2>
+
+      <div class="filters-bar">
+        <input
+          type="text"
+          [(ngModel)]="searchKeyword"
+          placeholder="Rechercher par titre ou lieu..."
+        />
+        <select [(ngModel)]="filterType">
+          <option value="">Tous les types</option>
+          @for (t of typesList; track t) {
+            <option [value]="t">{{ t }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="items-list">
+        <!-- Syntaxe moderne @for avec track : Angular identifie chaque ligne par son id
+             pour éviter de détruire et recréer tout le DOM à chaque filtrage ou ajout -->
+        @for (item of filteredPollutions; track item.id ?? $index) {
+          <div
+            class="item-row"
+            appCyberReveal
+            [delay]="$index * 0.05"
+            [appHighlightPollution]="item.level ?? 15"
+            (click)="selectPollution(item)"
+            [class.active]="selectedPollution?.id === item.id"
+            [ngClass]="getBgClass(item)"
+          >
+            <div class="item-info">
+              <span class="badge"> {{ item.type }} • {{ item.level ?? 15 | pollutionLevel }} </span>
+              <div class="item-title">{{ item.titre }}</div>
+              <div class="item-meta">{{ item.lieu }} — {{ item.dateObservation }}</div>
+            </div>
+
+            <div class="item-actions">
+              <button type="button" class="action-btn view-btn" (click)="selectPollution(item)">
+                Voir
+              </button>
+              <button
+                type="button"
+                class="action-btn delete-btn"
+                (click)="deleteItem(item.id, $event)"
+              >
+                ✕
+              </button>
+            </div>
+          </div>
+        } @empty {
+          <div class="empty-state">
+            Aucune pollution répertoriée pour ces critères.
+          </div>
+        }
+      </div>
+    </section>
+  </div>
+
+  <!-- Fenêtre de détails HUD Cyberpunk -->
+  <div *ngIf="selectedPollution" class="detail-overlay" (click)="closeDetail()">
+    <div class="detail-modal" appCyberReveal [delay]="0" (click)="$event.stopPropagation()">
+      <div class="modal-accent-bar"></div>
+
+      <!-- Bannière visuelle dynamique selon le type -->
+      <div class="modal-hero" [ngClass]="getBgClass(selectedPollution)">
+        <div class="hero-top">
+          <span class="file-code">DOSSIER // #{{ selectedPollution.id || '001' }}</span>
+          <button type="button" class="close-btn" (click)="closeDetail()" title="Fermer">✕</button>
+        </div>
+
+        <div class="hero-bottom">
+          <span class="badge">
+            {{ selectedPollution.type }} • {{ selectedPollution.level ?? 15 | pollutionLevel }}
+          </span>
+          <h3>{{ selectedPollution.titre }}</h3>
+        </div>
+      </div>
+
+      <!-- Corps télémétrique -->
+      <div class="modal-body">
+        <!-- Jauge visuelle de dangerosité -->
+        <div class="danger-meter">
+          <div class="meter-header">
+            <span class="meter-label">INDICE DE DANGEROSITÉ</span>
+            <span class="meter-value">
+              {{ selectedPollution.level ?? 15 }} / 100+ —
+              <strong>{{ selectedPollution.level ?? 15 | pollutionLevel }}</strong>
+            </span>
+          </div>
+          <div class="meter-track">
+            <div
+              class="meter-fill"
+              [style.width.%]="
+                (selectedPollution.level ?? 15) > 100 ? 100 : (selectedPollution.level ?? 15)
+              "
+            ></div>
+          </div>
+        </div>
+
+        <!-- Grille d'informations clés -->
+        <div class="telemetry-grid">
+          <div class="telemetry-cell">
+            <span class="cell-label">LOCALISATION</span>
+            <span class="cell-value">{{ selectedPollution.lieu }}</span>
+          </div>
+
+          <div class="telemetry-cell">
+            <span class="cell-label">DATE DU RELEVÉ</span>
+            <span class="cell-value">{{ selectedPollution.dateObservation }}</span>
+          </div>
+
+          <div
+            class="telemetry-cell full-span"
+            *ngIf="selectedPollution.latitude && selectedPollution.longitude"
+          >
+            <span class="cell-label">COORDONNÉES GPS</span>
+            <span class="cell-value">
+              {{ selectedPollution.latitude }}° N / {{ selectedPollution.longitude }}° E
+            </span>
+          </div>
+        </div>
+
+        <!-- Rapport de terrain -->
+        <div class="report-section">
+          <span class="cell-label">RAPPORT D'ANALYSE TERRAIN</span>
+          <div class="detail-description">
+            {{
+              selectedPollution.description ||
+                'Aucune observation complémentaire enregistrée pour ce relevé.'
+            }}
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="cyber-btn close-footer-btn" (click)="closeDetail()">
+            FERMER LE DOSSIER
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

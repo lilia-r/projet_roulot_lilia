@@ -1,0 +1,67 @@
+<div class="signup-page">
+  <h1 class="page-title" appCyberReveal [delay]="0">ACCÈS AU SYSTÈME</h1>
+
+  <div class="form-card" appCyberReveal [delay]="0.12">
+    <div class="accent-border"></div>
+
+    <form (ngSubmit)="onSubmit()" class="form-content">
+      <div class="form-group">
+        <label for="name">NOM COMPLET</label>
+        <input
+          id="name"
+          type="text"
+          [(ngModel)]="formData.name"
+          name="name"
+          placeholder="Ex: Lilia Roulot"
+          required
+          autocomplete="off"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="email">ADRESSE EMAIL</label>
+        <input
+          id="email"
+          type="email"
+          [(ngModel)]="formData.email"
+          name="email"
+          placeholder="nom@exemple.com"
+          required
+          autocomplete="off"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="password">MOT DE PASSE</label>
+        <input
+          id="password"
+          type="password"
+          [(ngModel)]="formData.password"
+          name="password"
+          placeholder="••••••••••••"
+          minlength="6"
+          required
+        />
+      </div>
+
+      <button type="submit" class="submit-btn" [disabled]="isLoading">
+        {{ isLoading ? 'CONNEXION EN COURS...' : "S'INSCRIRE & ACCÉDER" }}
+      </button>
+    </form>
+
+    <!-- Message de confirmation -->
+    <div *ngIf="response" class="status-box success" appCyberReveal [delay]="0">
+      <div class="status-title">{{ response.message }} — Redirection...</div>
+      <div class="status-details">
+        <span><strong>ID :</strong> {{ response.user.id }}</span>
+        <span><strong>NOM :</strong> {{ response.user.name }}</span>
+        <span><strong>EMAIL :</strong> {{ response.user.email }}</span>
+      </div>
+    </div>
+
+    <!-- Message d'erreur -->
+    <div *ngIf="errorMessage" class="status-box error" appCyberReveal [delay]="0">
+      {{ errorMessage }}
+    </div>
+  </div>
+</div>
